@@ -1,0 +1,96 @@
+background_image: "assets/figures/stars.png"
+stars:
+  - x: 20.000
+    y: 232.06
+    radius: 4
+    text: "How should videos be sampled (fps vs. uniform)?"
+
+  - x: 35.027
+    y: 288.50
+    radius: 4
+    text: "How many frames or tokens per frame are optimal?"
+
+  - x: 89.955
+    y: 341.02
+    radius: 4
+    text: "How do we handle large video durations?"
+
+  - x: 39.652
+    y: 204.79
+    radius: 4
+    text: "Which vision encoders yield optimal representations?"
+
+  - x: 129.373
+    y: 333.94
+    radius: 4
+    text: "Should we use video encoders or image encoders?"
+
+  - x: 171.079
+    y: 256.09
+    radius: 4
+    text: "Should we combine multiple encoders?"
+
+  - x: 136.663
+    y: 207.47
+    radius: 4
+    text: "What token resampler is best?"
+
+  - x: 180.015
+    y: 205.80
+    radius: 4
+    text: "How much can we resample video tokens without losing performance?"
+
+  - x: 161.084
+    y: 108.69
+    radius: 4
+    text: "What data mixture of text/image/video is optimal?"
+
+  - x: 209.378
+    y: 72.30
+    radius: 4
+    text: "How much text data is needed to prevent catastrophic forgetting?"
+
+  - x: 276.842
+    y: 170.12
+    radius: 4
+    text: "Should the mixture be slightly video-heavy?"
+
+  - x: 366.743
+    y: 300.66
+    radius: 4
+    text: "Do we need multi-stage training?"
+
+  - x: 456.689
+    y: 429.56
+    radius: 4
+    text: "When should we freeze/unfreeze video encoders?"
+
+  - x: 408.557
+    y: 463.99
+    radius: 4
+    text: "Should we train on video-only first or mix from the start?"
+
+  - x: 302.255
+    y: 306.55
+    radius: 4
+    text: "Should we insert textual timestamps or learned tokens between frames?"
+
+  - x: 206.129
+    y: 195.08
+    radius: 4
+    text: "Do design choices from small models transfer to larger ones?"
+
+connections:
+  - [4, 7]
+  - [7, 6]
+  - [6, 5]
+  - [5, 4]
+
+  - [9, 10]
+  - [10, 11]
+  - [11, 12]
+  - [12, 13]
+  - [13, 14]
+  - [14, 15]
+  - [15, 16]
+  - [16, 9]

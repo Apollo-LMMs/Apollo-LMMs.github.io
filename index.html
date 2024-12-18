@@ -1,0 +1,473 @@
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo: An Exploration of Video Understanding in Large Multimodal Models</title>
+    <meta name="description" content="Apollo is a family of video-LMMs">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta name="robots" content="all">
+    <meta content="en_EN" property="og:locale">
+    <meta content="website" property="og:type">
+    <meta content="https://apollo-lmms.github.io" property="og:url">
+    <meta content="Apollo" property="og:title">
+    <meta content="Apollo: An Exploration of Video Understanding in Large Multimodal Models" property="og:description">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@orrzohar">
+    <meta name="twitter:description" content="Apollo: An Exploration of Video Understanding in Large Multimodal Models">
+    <meta name="twitter:image:src" content="assets/figures/clarity.png">
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+    <link href="assets/fontawesome-free-6.6.0-web/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="128x128" href="assets/figures/favicon.webp">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+              scale: 95,
+              fonts: ["Gyre-Pagella"],
+              imageFont: null,
+              undefinedFamily: "'Arial Unicode MS', cmbright"
+            },
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+          });
+    </script>
+    <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+        <div class="container blog" id="first-content" style="background: linear-gradient(135deg,
+        rgba(179, 198, 239, 0.566) 0%,   /* Martini clear liquid */
+        rgba(179, 198, 239, 0.88) 15%,  /* Light silver hint */
+        rgb(179, 198, 239) 35%,  /* Slightly darker silver */
+        rgba(134, 179, 146, 0.852) 70%,  /* Olive green */
+        rgba(134, 179, 146, 0.589) 100%  /* Lemon twist or vermouth */
+    );">
+        <div class="blog-title">
+            <div class="blog-intro">
+                <div>
+                    <h1 class="title">Apollo: An Exploration of Video Understanding in Large Multimodal Models</h1>
+                    <p class="author">
+                        <a href="https://orrzohar.github.io" class="author-link" target="_blank">Orr Zohar</a>,
+                        <a href="https://wxh1996.github.io" class="author-link" target="_blank">Xiaohan Wang</a>,
+                        <a href="https://yanndubs.github.io" class="author-link" target="_blank">Yann Dubois</a>,
+                        <a href="https://hockeybro12.github.io" class="author-link" target="_blank">Nikhil Mehta</a>,
+                        <a href="http://xiaotong.me" class="author-link" target="_blank">Tong Xiao</a>,
+                        <a href="https://philippe-eecs.github.io/website/" class="author-link" target="_blank">Philippe Hansen-Estruch</a>,
+                        <a href="https://lichengunc.github.io" class="author-link" target="_blank">Licheng Yu</a>,
+                        <a href="https://minione.github.io" class="author-link" target="_blank">Xiaofang Wang</a>,
+                        <a href="https://xujuefei.com" class="author-link" target="_blank">Felix Juefei-Xu</a>,
+                        <a href="https://n-zhang.github.io" class="author-link" target="_blank">Ning Zhang</a>,
+                        <a href="https://ai.stanford.edu/~syyeung/" class="author-link" target="_blank">Serena Yeung-Levy</a>, and
+                        <a href="https://xidexia.github.io" class="author-link" target="_blank">Xide Xia</a>
+                        </p>                    <p class="author" style="padding-top: 0px;">
+                        <sup>1</sup>Meta GenAI &nbsp;&nbsp; <sup>2</sup>Stanford University
+                    </p>
+                    <p class="abstract">
+                        We investigate the mechanisms that drive video understanding in large multimodal models and provide actionable insights for the community. Our work includes:
+                        <ul>
+                            <li>Systematic exploration of the design space of video-LMMs, uncovering critical factors that drive performance.</li>
+                            <li>Investigation of training schedules and data mixtures, providing practical insights for optimizing model performance.</li>
+                            <li>Discovery of "Scaling Consistency," enabling efficient design decisions on smaller LMMs that generalize to larger scales.</li>
+                            <li>A novel benchmark, ApolloBench, for efficient evaluation.</li>
+                            <li>Introducing Apollo, a family of state-of-the-art video-LMMs.</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="info">
+                    <div>
+                        <a href="https://arxiv.org/abs/2412.10360" class="button icon" style="background-color: rgba(255, 255, 255, 0.25); margin-bottom: 0;">Paper <i class="far fa-book-open"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-cover">
+                <div class="canvas-container">
+                    <canvas id="starCanvas" width="500" height="600"></canvas>
+                    <div id="starInfo"></div>
+                </div>
+            </div>
+        </div> 
+    </div> 
+
+    <div class="container blog main first" id="blog-main">            
+        <p class="text">
+            We introduce <b>Apollo</b>, a new family of state-of-the-art video-LMMs. 
+            In developing Apollo, we uncover <i>Scaling Consistency</i>, enabling us to reliably make design decisions on smaller models and datasets, dramatically cutting computational costs.
+            Guided by these principles, we train hundreds of model variants—systematically exploring video sampling strategies, token integration, training schedules, and data mixtures.
+            Leveraging these insights, Apollo sets a new benchmark in efficient, high-performance video-language modeling.
+        </p>
+        <img src="assets/figures/apollooverview.png">
+    </div>
+    <div class="container blog max gray">
+        <div class="slideshow">
+            <div class="navigation">
+                <a class="button icon" id="prev_btn"><i class="fa-solid fa-left"></i></a>
+                <a class="button icon" id="next_btn"><i class="fa-solid fa-right"></i></a>
+                
+            </div>
+            <div class="slider">
+                <div class="slider-item">
+                    <img src="assets/findings/img_1.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        Finding 1: We discover Scaling Consistency, where design decisions can be made on smaller models and datasets and transfer reliably to larger ones.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_8.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        <!-- Insert the corresponding text from txt_1.txt here -->
+                        Finding 8: Progressively unfreezing the different components in different stages leads to superior model training dynamics.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_2.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        Finding 2: fps sampling is preferable over uniform sampling during model training and inference.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_3.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        Finding 3: There is a trade-off between tps and fps, with 8-32 tokens per frame being optimal.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_6.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        <!-- Insert the corresponding text from txt_1.txt here -->
+                        Finding 6: Perceiver resampling shows superior performance when reducing the tokens/frame.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_4.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        Finding 4: SigLIP-SO400M is the best single encoder for video-LMMs.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_5.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        Finding 5: Combining SigLIP-SO400M with InternVideo2 leads to the best overall performance.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_7.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        <!-- Insert the corresponding text from txt_1.txt here -->
+                        Finding 7: Adding tokens (text, learned, etc.) between the video tokens derived from different frames or clips is sufficient for efficient token integration.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_9.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        <!-- Insert the corresponding text from txt_1.txt here -->
+                        Finding 9: Finetuning video encoders on only video data further improves overall performance, especially on reasoning and domain-specific tasks.
+                </div>
+                <div class="slider-item">
+                    <img src="assets/findings/img_10.png" alt="Finding 1" style="width: 100%; max-width:600px;">
+                    <p class="text">
+                        <!-- Insert the corresponding text from txt_1.txt here -->
+                        Finding 10: Data mixture matters, and including a moderate amount of text data and maintaining a slight video-heavy mix leads to optimal performance.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container blog main">
+        <h1>
+            Results
+        </h1>
+        <div style="overflow-x: auto; max-width: 100%;">
+            <table class="benchmark">
+                        
+                <style>
+                    table.benchmark {
+                        border-collapse: collapse;
+                        width: 100%;
+                        font-family: Charter;
+                        font-size: 14px;
+                        margin-top: 2rem;
+                        margin-bottom: 2rem;
+                    }
+                    table.benchmark th, table.benchmark td {
+                        border: 1px solid #ddd;
+                        padding: 10px;
+                        vertical-align: middle;
+                        text-align: center;
+                    }
+                    table.benchmark thead th {
+                        background: #f5f5f5;
+                        font-weight: bold;
+                    }
+                    table.benchmark th.rotate {
+                        white-space: nowrap;
+                        height: 165px;
+                        vertical-align: bottom;
+                        left: 50%; /* horizontally centers */
+                        padding: 10px 0px;
+                    }
+                    table.benchmark th.rotate > div {
+                        transform: translateX(50%) rotate(-90deg); 
+                        width: 20px;
+                    }
+                    table.benchmark .section-header {
+                        text-align: left;
+                        font-style: italic;
+                        background: #f9f9f9;
+                        font-weight: normal;
+                    }
+                    table.benchmark tr:nth-child(even) {
+                        background: #fcfcfc;
+                    }
+                    /* Gray background for ApolloBench columns */
+                    table.benchmark td:nth-last-child(-n+6), 
+                    table.benchmark th:nth-last-child(-n+6) {
+                        background: #f0f4fa;
+                    }
+                    /* Highlight selected rows (as in the original) */
+                    .bg-highlight {
+                        background: #e6eefb !important;
+                    }
+                    /* Bold model names */
+                    .bold {
+                        font-weight: bold;
+                    }
+                    .underline {
+                        text-decoration: underline;
+                    }
+                </style>
+            
+                <table class="benchmark">
+                    <thead>
+                        <tr>
+                            <th rowspan="3">Model</th>
+                            <th colspan="5">Existing Benchmarks</th>
+                            <th colspan="6">ApolloBench</th>
+                        </tr>
+                        <tr>
+                            <th class="rotate"><div>TempCompass</div></th>
+                            <th class="rotate"><div>MLVU</div></th>
+                            <th class="rotate"><div>PerceptionTest</div></th>
+                            <th class="rotate"><div>VideoMME</div></th>
+                            <th class="rotate"><div>L-VideoBench</div></th>
+            
+                            <th class="rotate"><div>OCR</div></th>
+                            <th class="rotate"><div>Egocentric</div></th>
+                            <th class="rotate"><div>Spatial</div></th>
+                            <th class="rotate"><div>Perception</div></th>
+                            <th class="rotate"><div>Reasoning</div></th>
+                            <th class="rotate"><div>Overall</div></th>
+                        </tr>
+                        <tr>
+                            <th>mc</th>
+                            <th>m-avg</th>
+                            <th>val</th>
+                            <th>wo/w sub.</th>
+                            <th>val</th>
+                            <th></th><th></th><th></th><th></th><th></th><th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="section-header"><td colspan="12">Proprietary</td></tr>
+                        <tr>
+                            <td>GPT-4V (OpenAI, 2023)</td>
+                            <td>-</td><td>49.2</td><td>-</td><td>59.9/63.3</td><td>61.3</td>
+                            <td>65.7</td><td>55.0</td><td>70.8</td><td>41.0</td><td>44.7</td><td>58.7</td>
+                        </tr>
+                        <tr>
+                            <td>GPT-4o (OpenAI, 2024)</td>
+                            <td>70.9</td><td>64.6</td><td>-</td><td>71.9/77.2</td><td>66.7</td>
+                            <td>76.0</td><td>69.2</td><td>90.1</td><td>82.0</td><td>83.1</td><td>79.8</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini-1.5-Flash (Team et al., 2023)</td>
+                            <td>-</td><td>-</td><td>-</td><td>70.3/75.0</td><td>61.6</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini-1.5-Pro (Team et al., 2023)</td>
+                            <td>69.3</td><td>-</td><td>-</td><td>75.0/81.3</td><td>64.0</td>
+                            <td>74.5</td><td>77.1</td><td>79.5</td><td>85.1</td><td>88.1</td><td>80.6</td>
+                        </tr>
+                        <tr>
+                            <td>Claude-3.5-Sonnet (Anthropic, 2024)</td>
+                            <td>-</td><td>36.5</td><td>-</td><td>60.0/62.9</td><td>-</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+            
+                        <tr class="section-header"><td colspan="12">Open-weight</td></tr>
+                        <tr>
+                            <td>Qwen2VL-2B (Wang et al., 2024a)</td>
+                            <td>60.6</td><td>59.5</td><td>53.9</td><td>55.6/60.4</td><td>48.5</td>
+                            <td>29.0</td><td>29.0</td><td>47.0</td><td>50.0</td><td>46.0</td><td>40.2</td>
+                        </tr>
+                        <tr>
+                            <td>Qwen2VL-7B (Wang et al., 2024a)</td>
+                            <td>68.5</td><td>65.5</td><td>62.3</td><td>63.3/69.0</td><td>55.6</td>
+                            <td>57.4</td><td>67.5</td><td>63.7</td><td>71.2</td><td>67.9</td><td>66.0</td>
+                        </tr>
+                        <tr>
+                            <td>Qwen2VL-72B (Wang et al., 2024a)</td>
+                            <td>-</td><td>-</td><td>68.0</td><td>71.2/77.8</td><td>-</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Aria 8x3.5B (Li et al., 2024b)</td>
+                            <td>69.9</td><td>-</td><td>53.9</td><td>67.6/72.1</td><td>64.2</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Pixtral-12B (Agrawal et al., 2024)</td>
+                            <td>-</td><td>-</td><td>-</td><td>40.7/47.5</td><td>44.9</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+            
+                        <tr class="section-header"><td colspan="12">Open-source</td></tr>
+                        <tr>
+                            <td>LLaVA-OV-0.5B (Li et al., 2024a)</td>
+                            <td>53.2</td><td>50.3</td><td>49.2</td><td>44.0/43.5</td><td>45.8</td>
+                            <td>38.0</td><td>27.0</td><td>28.0</td><td>20.0</td><td>38.0</td><td>30.0</td>
+                        </tr>
+                        <tr>
+                            <td>VILA1.5 3B (Lin et al., 2024)</td>
+                            <td>56.1</td><td>44.4</td><td>49.1</td><td>42.2/44.2</td><td>42.9</td>
+                            <td>31.7</td><td>33.0</td><td>29.3</td><td>38.0</td><td>44.7</td><td>36.1</td>
+                        </tr>
+                        <tr>
+                            <td>InternVL2-2B (Li et al., 2024a)</td>
+                            <td>53.4</td><td>48.2</td><td>49.6</td><td>30.8/-</td><td>44.8</td>
+                            <td>40.8</td><td>46.3</td><td>34.3</td><td>44.7</td><td>45.3</td><td>42.1</td>
+                        </tr>
+                        <tr>
+                            <td>Phi-3.5-Vision-4.2B (Abdin et al., 2024)</td>
+                            <td>-</td><td>-</td><td>-</td><td>50.8/-</td><td>-</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>LongVU 3.2B (Shen et al., 2024)</td>
+                            <td>-</td><td class="underline">55.9</td><td>-</td><td>51.5/-</td><td>-</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr class="bg-highlight">
+                            <td class="bold">Apollo-1.5B</td>
+                            <td class="bold">60.8</td><td class="bold">63.3</td><td class="bold">61.0</td><td class="bold">53.0/54.6</td><td class="bold">54.1</td>
+                            <td class="bold">49.0</td><td class="bold">63.3</td><td class="bold">50.0</td><td class="bold">66.5</td><td class="bold">57.4</td><td class="bold">57.0</td>
+                        </tr>
+            
+                        <tr>
+                            <td>LongVA-7B (Zhang et al., 2024e)</td>
+                            <td>-</td><td>56.3</td><td>-</td><td>52.6/54.3</td><td>-</td>
+                            <td>32.4</td><td>43.1</td><td>41.0</td><td>37.7</td><td>51.1</td><td>41.5</td>
+                        </tr>
+                        <tr>
+                            <td>XComposer-8B (Zhang et al., 2024d)</td>
+                            <td>-</td><td>37.3</td><td>34.4</td><td>55.8/58.8</td><td>-</td>
+                            <td><b>50.7</b></td><td>42.0</td><td>54.7</td><td>54.7</td><td>40.5</td><td>48.6</td>
+                        </tr>
+                        <tr>
+                            <td>Kangaroo-8B (Liu et al., 2024b)</td>
+                            <td>61.3</td><td>61.0</td><td>-</td><td>56.0/57.6</td><td>54.2</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Video-XL 7B (Shu et al., 2024)</td>
+                            <td>-</td><td>64.9</td><td>-</td><td>55.5/61.0</td><td>49.5</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Oryx 7B (Liu et al., 2024d)</td>
+                            <td>-</td><td class="underline">67.5</td><td>-</td><td>50.3/55.3</td><td><b>55.5</b></td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr class="bg-highlight">
+                            <td class="bold">Apollo-3B</td>
+                            <td class="bold">62.5</td><td class="bold">68.7</td><td class="bold">65.0</td><td class="bold">58.4/60.6</td><td class="bold underline">55.1</td>
+                            <td class="bold underline">49.6</td><td class="bold">68.6</td><td class="bold">59.3</td><td class="bold">67.0</td><td class="bold">68.4</td><td class="bold">62.7</td>
+                        </tr>
+            
+                        <tr>
+                            <td>InternVL2-8B (Chen et al., 2024b)</td>
+                            <td>65.3</td><td>50.8</td><td>57.4</td><td>54.0/56.9</td><td>51.8</td>
+                            <td>50.0</td><td>48.4</td><td>54.3</td><td>57.7</td><td>51.8</td><td>52.8</td>
+                        </tr>
+                        <tr>
+                            <td>LLaVA-OV-7B (Li et al., 2024a)</td>
+                            <td>64.8</td><td>64.7</td><td>57.1</td><td>58.2/61.5</td><td>56.4</td>
+                            <td><b>56.0</b></td><td><b>69.1</b></td><td><b>69.0</b></td><td>63.3</td><td>63.2</td><td>64.0</td>
+                        </tr>
+                        <tr>
+                            <td>LongVU 7B (Shen et al., 2024)</td>
+                            <td>-</td><td>65.4</td><td>-</td><td>60.6/-</td><td>-</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>LLaVA-N-Video-32B (Zhang et al., 2024f)</td>
+                            <td>-</td><td>39.3</td><td>59.4</td><td>60.2/63.0</td><td>50.5</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Oryx 34B (Liu et al., 2024d)</td>
+                            <td>-</td><td>70.8</td><td>-</td><td>53.9/58.0</td><td><b>62.2</b></td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>VILA-1.5-40B (Lin et al., 2024)</td>
+                            <td>-</td><td>56.7</td><td>54.0</td><td>60.1/61.1</td><td>-</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr>
+                            <td>InternVL2-34B (Chen et al., 2024b)</td>
+                            <td>-</td><td>59.9</td><td>-</td><td>61.2/62.4</td><td>-</td>
+                            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                        </tr>
+                        <tr class="bg-highlight">
+                            <td class="bold">Apollo-7B</td>
+                            <td class="bold">64.9</td><td class="bold">70.9</td><td class="bold">67.3</td><td class="bold">61.3/63.3</td><td class="bold underline">58.5</td>
+                            <td class="bold underline">51.6</td><td class="bold underline">68.4</td><td class="bold underline">67.5</td><td class="bold">69.8</td><td class="bold">71.2</td><td class="bold">66.3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container blog main">
+        <p class='text'>
+            Website under construction, more coming soon...
+        </p>
+    </div>
+
+    
+    <div class="container blog main">
+        <h1>Citation</h1>
+        <p class="text">
+            If you find this useful, please consider citing our work:
+        </p>
+
+<pre><code class="plaintext">@article{apollo,
+    title={Apollo: An Exploration of Video Understanding in Large Multimodal Models},
+    author={Orr Zohar, Xiaohan Wang, Yann Dubois, Nikhil Mehta, Tong Xiao, Philippe Hansen-Estruch, Licheng Yu, Xiaofang Wang, Felix Juefei-Xu, Ning Zhang, Serena Yeung-Levy, and Xide Xia},
+    journal={arXiv preprint arXiv:2412.10360},
+    year={2024}
+}</code></pre>
+    </div>
+
+
+    <!-- Footer Page -->
+    <footer>
+        <div class="container">
+            <p>
+                This website is built on the <a href="https://shikun.io/projects/clarity">Clarity Template</a>, designed by <a href="https://shikun.io/">Shikun Liu</a>.
+            </p>
+        </div>    
+    </footer>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="assets/scripts/star.js"></script>
+    <script src="clarity/clarity.js"></script>    
+    <script src="assets/scripts/main.js"></script>
+    </html>
+</body>

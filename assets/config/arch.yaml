@@ -1,0 +1,48 @@
+background_image: "assets/figures/apollo_overview.png"
+stars:
+  - x: 290.000
+    y: 322.06
+    radius: 15
+    text: "FPS sampling is especially important during training."
+
+  - x: 500.000
+    y: 292.06
+    radius: 15
+    text: "videos should be sampled at 1-2 fps and 8-32 tokens per frame."
+
+  - x: 450.000
+    y: 140.06
+    radius: 15
+    text: "Perceiver resampling outperforms average pooling."
+
+  - x: 500.000
+    y: 180.06
+    radius: 15
+    text: "SigLIP stands out as the best single encoder."
+
+  - x: 400.000
+    y: 180.06
+    radius: 15
+    text: "Combining InternVideo2 with SigLIP yields superior performance."
+
+  - x: 800.000
+    y: 260.06
+    radius: 15
+    text: "Approximately 14% text data is requried to maintain good performance."
+
+  - x: 530.000
+    y: 90.06
+    radius: 15
+    text: "Adding tokens (text, learned, etc.) between the video tokens derived from different frames or clips is sufficient for efficient token integration."
+
+  - x: 1030.000
+    y: 90.06
+    radius: 15
+    text: "Progressively unfreezing the different components in different stages leads to superior model training dynamics."
+
+  - x: 1130.000
+    y: 140.06
+    radius: 15
+    text: "Finetuning video encoders on only video data further improves overall performance, especially on reasoning and domain-specific tasks."
+
+    

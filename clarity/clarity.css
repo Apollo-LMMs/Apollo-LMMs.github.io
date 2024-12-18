@@ -1,0 +1,227 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@font-face {
+  font-family: "Charter";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../assets/fonts/Charter/charter_regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Charter";
+  font-style: italic;
+  font-weight: normal;
+  src: url("../assets/fonts/Charter/charter_italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Charter";
+  font-style: normal;
+  font-weight: bold;
+  src: url("../assets/fonts/Charter/charter_bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Charter";
+  font-style: italic;
+  font-weight: bold;
+  src: url("../assets/fonts/Charter/charter_bold_italic.woff2") format("woff2");
+}
+.columns-12 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.columns-10 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.columns-8 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.columns-6 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.columns-6-3d {
+  display: grid;
+  align-items: center;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(2, 1.3fr 1.3fr 1fr);
+}
+
+.columns-5 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.columns-4 {
+  display: grid;
+  -moz-column-gap: 2.5vw;
+       column-gap: 2.5vw;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.columns-3 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.columns-3-slow-motion {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: 1fr 1fr 2.1fr;
+}
+.columns-3-slow-motion img {
+  height: 100%;
+  width: 100%;
+}
+
+.slow-motion-ref {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.columns-2 {
+  display: grid;
+  -moz-column-gap: 2vw;
+       column-gap: 2vw;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media screen and (max-width: 992px) {
+  .columns-12 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .columns-10 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .columns-8 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .columns-6 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-5 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-6-3d {
+    grid-template-columns: 1.3fr 1.3fr 1fr;
+  }
+}
+@media screen and (max-width: 769px) {
+  .columns-12 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .columns-2 {
+    display: grid;
+    -moz-column-gap: 2vw;
+         column-gap: 2vw;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}/*# sourceMappingURL=clarity.css.map */
+
+/* Styles for custom canvas element (Star Map) */
+/* assets/styles/clarity.css */
+.canvas-container {
+  position: relative;
+  width: 90vw;
+  max-width: 500px;
+  margin: 20px auto;
+  background: #000;
+}
+
+#starCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#starInfo {
+  position: fixed;
+  background: rgba(20, 20, 20, 0.9);
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-family: "Poppins";
+  font-size: 14px;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0;
+  display: block; /* Always in layout, just transparent when not visible */
+  max-width: 250px;    /* Fixed width for consistency */
+  text-align: left;
+}
+
+#starInfo.visible {
+  opacity: 1;
+}
+
+
+.canvas-container-2 {
+  position: relative;
+  width: 100%;
+  max-width: 1250px;
+  margin: 20px auto;
+}
+
+#archCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#archInfo {
+  position: fixed;
+  display: none;
+  background: rgba(20,20,20,0.9);
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-family: sans-serif;
+  font-size: 14px;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0;
+}
+
+#archInfo.visible {
+  display: block;
+  opacity: 1;
+}
